@@ -23,7 +23,7 @@ app.get('/api.courses', (req, res) => {
 
 
 //Egyetlen kurzus adatainak lekérése url paraméter alapján
-app.get('/api.courses/:id', (req, res) => {
+app.get('/api/courses/:id', (req, res) => {
     //Keresés a tömben ID(url paraméter) alapján
     const course = courses.find(c => c.id === parseInt(req.params.id));
     //A keresett elem nem található(404) státuszkód és hibaüzenet visszaadása
@@ -32,7 +32,7 @@ app.get('/api.courses/:id', (req, res) => {
 })
 
 //POST végpont kurzus adatok küldésére 
-app.post('/api.courses', (req, res) => {
+app.post('/api/courses', (req, res) => {
 //Új kurzus objektum létrehozása (Az ID automatikus növelése)
     const course = {
         id: courses.length + 1,
@@ -44,7 +44,7 @@ res.status(200).json({message: "Új elem hozzáadva", data:req.body});
 })
 
 //Delete végpont kurzus adatok törlésére
-app.delete('/api.courses/:id',(req, res) => {
+app.delete('/api/courses/:id',(req, res) => {
     //Keresés a tömben ID(url paraméter) alapján
     const course = courses.find(c => c.id === parseInt(req.params.id));
     //A keresett elem nem található(404) státuszkód és hibaüzenet visszaadása
@@ -55,6 +55,17 @@ app.delete('/api.courses/:id',(req, res) => {
     res.json({message: "Sikeres adat törlés", data: req.body})//A törlés nyugtázása
 })
 
+//PUT a kiválasztott kurzus adatainak módosítására
+app.put('/api/courses/:id',(req, res) => {
+    //Keresés a tömben ID(url paraméter) alapján
+    const course = courses.find(c => c.id === parseInt(req.params.id));
+    //A keresett elem nem található(404) státuszkód és hibaüzenet visszaadása
+    if (!course) res.status(404).send('A megadott ID-val nem létezik kurzus!');
+    
+    
+    course.name = req.body.name;
+    res.json({message: "Sikeres adatmódosítás!", data: req.body})
+})
 
 
 //A webszerver elindítása
